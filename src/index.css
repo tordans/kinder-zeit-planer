@@ -1,0 +1,15 @@
+@import '@fontsource/fredoka/400.css';
+@import '@fontsource/fredoka/600.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Fredoka', system-ui, sans-serif;
+  --color-sky-soft: #e8f4fc;
+  --color-peach: #ffe8d6;
+  --color-mint: #d8f3e5;
+  --color-lavender: #ede7f6;
+}
+
+body {
+  @apply bg-sky-soft min-h-screen font-sans text-slate-800 antialiased;
+}
