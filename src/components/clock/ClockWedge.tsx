@@ -39,8 +39,9 @@ export function ClockWedge({ wedge, size, active = false }: ClockWedgeProps) {
       <path
         d={path}
         fill={wedge.color}
-        stroke={active ? '#1e293b' : 'white'}
-        strokeWidth={active ? 3 : 2}
+        stroke={active ? '#7c3aed' : 'white'}
+        strokeWidth={active ? 4 : 2}
+        strokeDasharray={active ? '10 6' : undefined}
         opacity={active ? 1 : 0.95}
       />
       {duration > 5 ? subdivisions : null}

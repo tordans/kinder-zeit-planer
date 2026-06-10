@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react'
 
 import { useCurrentMinute } from '../../hooks/useCurrentMinute'
 import { de } from '../../i18n/de'
-import { usePlanStore } from '../../store/planStore'
+import { usePlanState } from '../../hooks/usePlanState'
 import { ClockPanel } from '../clock/ClockPanel'
 
 export function ClockModeView() {
-  const setMode = usePlanStore((state) => state.setMode)
+  const { setMode } = usePlanState()
   const { hour, minute, time } = useCurrentMinute()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -58,11 +58,11 @@ export function ClockModeView() {
           />
         </svg>
       </button>
-      <div className="flex flex-1 flex-col items-center overflow-auto p-6 pt-16">
-        <p className="mb-8 text-4xl font-semibold text-slate-800 tabular-nums">
+      <div className="flex w-full flex-1 flex-col overflow-auto px-6 pt-16 pb-8">
+        <p className="mb-6 text-center text-4xl font-semibold text-slate-800 tabular-nums sm:mb-8 sm:text-5xl">
           {de.currentTimeHeader(time)}
         </p>
-        <ClockPanel layout="columns" showLiveHand currentHour={hour} currentMinute={minute} />
+        <ClockPanel layout="fluid" showLiveHand currentHour={hour} currentMinute={minute} />
       </div>
     </div>
   )

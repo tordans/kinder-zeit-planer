@@ -2,22 +2,26 @@ export const de = {
   appTitle: 'Kinder Zeit Planer',
   openClockMode: 'Uhrenmodus öffnen',
   closeClockMode: 'Schließen',
-  goalTimeLabel: 'Wann musst du losgehen / wo sein?',
+  goalTimeLabel: 'Wann muss du da sein oder fertig sein?',
   goalTime: 'Zielzeit',
-  clocks: 'Uhren',
-  activities: 'Tätigkeiten',
-  activitiesHint: 'Plane zurück vom Losgehen aus…',
+  clocksTitle: 'So sehen die Uhren aus.',
+  clocksDetail: 'Jede Uhr ist eine Stunde.',
+  activitiesTitle: 'Schreibe Schritt für Schritt auf, was du tun musst.',
+  activitiesDetail: 'Plane vom Losgehen aus (rechts) rückwärts.',
   addActivity: 'Tätigkeit hinzufügen',
+  newActivity: 'Neue Tätigkeit:',
   saveActivity: 'Speichern',
   removeActivity: 'Tätigkeit entfernen',
   duration: 'Minuten',
+  durationLabel: (minutes: number) => `${minutes} Min`,
+  decreaseDuration: '5 Minuten weniger',
+  increaseDuration: '5 Minuten mehr',
   routineStart: 'Loslegen um',
-  routineStartHint: 'Aufstehen / Routine-Start',
-  routineStartRelative: (relative: string) => `Das ist ${relative}`,
+  routineStartRelative: (relative: string) => `Das ist ${relative}.`,
   hourLabel: (hour: number) => `${String(hour).padStart(2, '0')}:00 Uhr`,
   hourRangeLabel: (hour: number) => {
-    const start = `${String(hour).padStart(2, '0')}:00`
-    const end = `${String((hour + 1) % 24).padStart(2, '0')}:00`
+    const start = String(hour).padStart(2, '0')
+    const end = String((hour + 1) % 24).padStart(2, '0')
     return `${start} – ${end} Uhr`
   },
   currentTimeHeader: (time: string) => `Jetzt: ${time} Uhr`,

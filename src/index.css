@@ -13,3 +13,7 @@
 body {
   @apply bg-sky-soft min-h-screen font-sans text-slate-800 antialiased;
 }
+
+button:not(:disabled) {
+  cursor: pointer;
+}

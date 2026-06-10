@@ -9,9 +9,12 @@ import { TooLateZone } from './TooLateZone'
 type HourClockProps = {
   clock: HourClockType
   size?: number
+  fluid?: boolean
   showLiveHand?: boolean
   showHourRange?: boolean
   startMinute?: number
+  startTimeLabel?: string
+  goalTimeLabel?: string
   currentHour?: number
   currentMinute?: number
 }
@@ -19,9 +22,12 @@ type HourClockProps = {
 export function HourClock({
   clock,
   size = 280,
+  fluid = false,
   showLiveHand = false,
   showHourRange = false,
   startMinute,
+  startTimeLabel,
+  goalTimeLabel,
   currentHour,
   currentMinute,
 }: HourClockProps) {
@@ -58,18 +64,39 @@ export function HourClock({
       ? polarToCartesian(cx, cy, labelRadius * 1.1, minuteToAngle(startMinute))
       : null
 
+  const goalLabelPos =
+    clock.goalMinute !== undefined
+      ? polarToCartesian(cx, cy, labelRadius * 1.12, minuteToAngle(clock.goalMinute))
+      : null
+
   const showHand = showLiveHand && currentHour === clock.hour && currentMinute !== undefined
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <h3 className="text-center text-lg font-semibold text-slate-700">
+    <div
+      className={
+        fluid
+          ? 'flex min-w-[220px] flex-[1_1_280px] flex-col items-center gap-3'
+          : 'flex flex-col items-center gap-3'
+      }
+    >
+      <h3
+        className={
+          fluid
+            ? 'text-center text-xl font-semibold text-slate-700 sm:text-2xl'
+            : 'text-center text-lg font-semibold text-slate-700'
+        }
+      >
         {showHourRange ? de.hourRangeLabel(clock.hour) : de.hourLabel(clock.hour)}
       </h3>
       <svg
-        width={size}
-        height={size}
+        width={fluid ? undefined : size}
+        height={fluid ? undefined : size}
         viewBox={`${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}`}
-        className="drop-shadow-md overflow-visible"
+        className={
+          fluid
+            ? 'aspect-square w-full max-w-full drop-shadow-md overflow-visible'
+            : 'drop-shadow-md overflow-visible'
+        }
       >
         <circle cx={cx} cy={cy} r={radius} fill="white" stroke="#cbd5e1" strokeWidth="4" />
         {ticks}
@@ -112,8 +139,45 @@ export function HourClock({
             </text>
           )
         })}
+        {goalLabelPos ? (
+          <g aria-label={de.goalTime}>
+            <line
+              x1={cx}
+              y1={cy}
+              x2={goalLabelPos.x}
+              y2={goalLabelPos.y}
+              stroke="#dc2626"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            {goalTimeLabel ? (
+              <text
+                x={goalLabelPos.x}
+                y={goalLabelPos.y - 18}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="13"
+                fill="#dc2626"
+                fontWeight="700"
+              >
+                {goalTimeLabel}
+              </text>
+            ) : null}
+            <text
+              x={goalLabelPos.x}
+              y={goalLabelPos.y - (goalTimeLabel ? 4 : 14)}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fontSize="11"
+              fill="#dc2626"
+              fontWeight="600"
+            >
+              {de.goalTime}
+            </text>
+          </g>
+        ) : null}
         {startLabelPos ? (
-          <g>
+          <g aria-label={de.startMarker}>
             <line
               x1={cx}
               y1={cy}
@@ -123,12 +187,25 @@ export function HourClock({
               strokeWidth="2.5"
               strokeLinecap="round"
             />
+            {startTimeLabel ? (
+              <text
+                x={startLabelPos.x}
+                y={startLabelPos.y + 8}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="13"
+                fill="#059669"
+                fontWeight="700"
+              >
+                {startTimeLabel}
+              </text>
+            ) : null}
             <text
               x={startLabelPos.x}
-              y={startLabelPos.y}
+              y={startLabelPos.y + (startTimeLabel ? 22 : 14)}
               textAnchor="middle"
               dominantBaseline="middle"
-              fontSize="13"
+              fontSize="11"
               fill="#059669"
               fontWeight="600"
             >

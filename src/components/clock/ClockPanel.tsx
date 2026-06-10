@@ -1,15 +1,16 @@
 import { buildHourClocks, computeRoutineStart } from '../../lib/hourLayout'
 import { getMinuteOnHour } from '../../lib/time'
-import { usePlanStore } from '../../store/planStore'
+import { usePlanState } from '../../hooks/usePlanState'
 import { HourClock } from './HourClock'
 
-type ClockPanelLayout = 'stack' | 'columns'
+type ClockPanelLayout = 'stack' | 'columns' | 'fluid'
 
 type ClockPanelProps = {
   showLiveHand?: boolean
   currentHour?: number
   currentMinute?: number
   layout?: ClockPanelLayout
+  align?: 'center' | 'end'
 }
 
 function getClockSize(clockCount: number, layout: ClockPanelLayout) {
@@ -24,12 +25,13 @@ export function ClockPanel({
   currentHour,
   currentMinute,
   layout = 'stack',
+  align = 'center',
 }: ClockPanelProps) {
-  const goalTime = usePlanStore((state) => state.goalTime)
-  const activities = usePlanStore((state) => state.activities)
+  const { goalTime, activities } = usePlanState()
   const clocks = buildHourClocks(goalTime, activities)
   const routineStart = computeRoutineStart(goalTime, activities)
-  const orderedClocks = layout === 'columns' ? [...clocks].reverse() : clocks
+  const orderedClocks =
+    layout === 'columns' || layout === 'fluid' ? [...clocks].reverse() : clocks
   const clockSize = getClockSize(clocks.length, layout)
 
   if (clocks.length === 0) {
@@ -41,9 +43,11 @@ export function ClockPanel({
   }
 
   const layoutClass =
-    layout === 'columns'
-      ? 'grid w-full max-w-6xl grid-cols-1 justify-items-center gap-6 sm:grid-cols-2'
-      : 'flex flex-col gap-8'
+    layout === 'fluid'
+      ? 'flex w-full flex-wrap items-stretch justify-center gap-6'
+      : layout === 'columns'
+        ? `flex w-full flex-row flex-wrap items-start gap-x-10 gap-y-8 ${align === 'end' ? 'justify-end' : 'justify-center'}`
+        : 'flex flex-col gap-8'
 
   return (
     <div className={layoutClass}>
@@ -51,10 +55,15 @@ export function ClockPanel({
         <HourClock
           key={clock.hour}
           clock={clock}
-          size={clockSize}
+          size={layout === 'fluid' ? 280 : clockSize}
+          fluid={layout === 'fluid'}
           showLiveHand={showLiveHand}
           showHourRange
           startMinute={getMinuteOnHour(routineStart, clock.hour)}
+          startTimeLabel={
+            getMinuteOnHour(routineStart, clock.hour) !== undefined ? routineStart : undefined
+          }
+          goalTimeLabel={clock.goalMinute !== undefined ? goalTime : undefined}
           currentHour={currentHour}
           currentMinute={currentMinute}
         />

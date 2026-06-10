@@ -55,7 +55,7 @@ export type ActivityDraft = Omit<Activity, 'id'>
 export function createActivityDraft(activityCount: number): ActivityDraft {
   return {
     label: '',
-    durationMinutes: 5,
+    durationMinutes: 10,
     color: ACTIVITY_COLORS[activityCount % ACTIVITY_COLORS.length],
     emoji: '⭐',
   }

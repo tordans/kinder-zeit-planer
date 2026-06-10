@@ -20,11 +20,11 @@ export function MinuteHand({ minute, size, visible }: MinuteHandProps) {
         y1={cy}
         x2={tip.x}
         y2={tip.y}
-        stroke="#1e293b"
-        strokeWidth="4"
+        stroke="#dc2626"
+        strokeWidth="5"
         strokeLinecap="round"
       />
-      <circle cx={cx} cy={cy} r={size * 0.04} fill="#1e293b" />
+      <circle cx={cx} cy={cy} r={size * 0.045} fill="#dc2626" stroke="#ffffff" strokeWidth="2" />
     </g>
   )
 }

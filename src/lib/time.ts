@@ -35,11 +35,18 @@ export function describeArc(
   startMinute: number,
   endMinute: number,
 ) {
+  const span = endMinute - startMinute
+
+  if (span >= 60) {
+    const start = polarToCartesian(cx, cy, radius, minuteToAngle(0))
+    const mid = polarToCartesian(cx, cy, radius, minuteToAngle(30))
+    return `M ${cx} ${cy} L ${start.x} ${start.y} A ${radius} ${radius} 0 1 1 ${mid.x} ${mid.y} A ${radius} ${radius} 0 1 1 ${start.x} ${start.y} Z`
+  }
+
   const startAngle = minuteToAngle(startMinute)
   const endAngle = minuteToAngle(endMinute >= 60 ? 0 : endMinute)
   const start = polarToCartesian(cx, cy, radius, startAngle)
   const end = polarToCartesian(cx, cy, radius, endAngle)
-  const span = endMinute - startMinute
   const largeArc = span > 30 ? 1 : 0
   return `M ${cx} ${cy} L ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y} Z`
 }
@@ -55,6 +62,15 @@ export function isValidGoalTime(time: string) {
   const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(time)
   if (!match) return false
   return Number(match[2]) % 5 === 0
+}
+
+export function snapGoalTimeToFiveMinutes(time: string) {
+  const match = /^([01]?\d|2[0-3]):([0-5]?\d)$/.exec(time)
+  if (!match) return null
+  const hours = Number(match[1])
+  const minutes = Number(match[2])
+  if (hours > 23 || minutes > 59) return null
+  return formatTime(Math.round((hours * 60 + minutes) / 5) * 5)
 }
 
 export function generateGoalTimeOptions() {

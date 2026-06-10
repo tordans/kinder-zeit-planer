@@ -4,6 +4,7 @@ import {
   describeArc,
   formatTime,
   isValidGoalTime,
+  snapGoalTimeToFiveMinutes,
   minuteToAngle,
   parseTime,
   subtractMinutes,
@@ -37,11 +38,22 @@ describe('time', () => {
     expect(path.includes('A 80 80')).toBe(true)
   })
 
+  it('describes a full hour arc', () => {
+    const path = describeArc(100, 100, 80, 0, 60)
+    expect(path.match(/A 80 80/g)?.length).toBe(2)
+  })
+
   it('validates goal times in five minute steps', () => {
     expect(isValidGoalTime('08:15')).toBe(true)
     expect(isValidGoalTime('00:00')).toBe(true)
     expect(isValidGoalTime('23:55')).toBe(true)
     expect(isValidGoalTime('08:17')).toBe(false)
     expect(isValidGoalTime('24:00')).toBe(false)
+  })
+
+  it('snaps goal times to five minute steps', () => {
+    expect(snapGoalTimeToFiveMinutes('08:17')).toBe('08:15')
+    expect(snapGoalTimeToFiveMinutes('08:01')).toBe('08:00')
+    expect(snapGoalTimeToFiveMinutes('08:15')).toBe('08:15')
   })
 })

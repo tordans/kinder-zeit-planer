@@ -20,6 +20,12 @@ describe('hourLayout', () => {
     expect(clocks[0]?.wedges[0]).toMatchObject({ startMinute: 5, endMinute: 15 })
   })
 
+  it('renders a full hour activity as one complete wedge', () => {
+    const clocks = buildHourClocks('08:00', [activity('1', 'Stunde', 60)])
+    const hourSeven = clocks.find((clock) => clock.hour === 7)
+    expect(hourSeven?.wedges[0]).toMatchObject({ startMinute: 0, endMinute: 60 })
+  })
+
   it('splits activities across two hour circles', () => {
     const clocks = buildHourClocks('08:15', [
       activity('2', 'Losgehen', 30),
