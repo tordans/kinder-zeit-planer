@@ -16,8 +16,15 @@ const indexRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([indexRoute])
 
+function getBasepath() {
+  const baseUrl = import.meta.env.BASE_URL
+  if (!baseUrl || baseUrl === '/') return '/'
+  return baseUrl.replace(/\/$/, '')
+}
+
 export const router = createRouter({
   routeTree,
+  basepath: getBasepath(),
   defaultPreload: false,
 })
 

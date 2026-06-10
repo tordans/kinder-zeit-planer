@@ -12,7 +12,8 @@
     "format:check": "oxfmt -c oxfmt.config.mjs --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:gh": "GITHUB_PAGES=true REPO_NAME=kinder-zeit-planer bun run build && vite preview"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
